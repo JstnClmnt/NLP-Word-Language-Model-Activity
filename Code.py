@@ -151,11 +151,11 @@ from keras.models import Sequential
 from keras.layers import Dense, LSTM, Embedding, Bidirectional, CuDNNLSTM, Dropout
 model = Sequential()
 model.add(Embedding(vocab_size, 300, input_length=seq_length))
-model.add(Bidirectional(CuDNNLSTM(128, return_sequences=True)))
+model.add(Bidirectional(CuDNNLSTM(256, return_sequences=True)))
 model.add(Dropout(0.2))
-model.add(Bidirectional(CuDNNLSTM(128)))
+model.add(Bidirectional(CuDNNLSTM(256, return_sequences=True)))
 model.add(Dropout(0.2))
-model.add(Dense(128, activation='relu'))
+model.add(Dense(256, activation='relu'))
 model.add(Dense(vocab_size, activation='softmax'))
 print(model.summary())
 
