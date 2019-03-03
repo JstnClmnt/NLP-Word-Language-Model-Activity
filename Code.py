@@ -146,16 +146,17 @@ seq_length = X.shape[1]
 # In[ ]:
 
 
-# define model
+# define model  
 from keras.models import Sequential
-from keras.layers import Dense, LSTM, Embedding, Bidirectional, CuDNNLSTM, Dropout
+from keras.layers import Dense, Flatten, CuDNNLSTM,LSTM, InputLayer, Bidirectional, TimeDistributed, Embedding, Activation,Dropout
+from keras.optimizers import Adam
 model = Sequential()
 model.add(Embedding(vocab_size, 300, input_length=seq_length))
 model.add(Bidirectional(CuDNNLSTM(256, return_sequences=True)))
 model.add(Dropout(0.2))
-model.add(Bidirectional(CuDNNLSTM(256, return_sequences=True)))
+model.add(Bidirectional(CuDNNLSTM(256)))
 model.add(Dropout(0.2))
-model.add(Dense(256, activation='relu'))
+model.add(Dense(128, activation='relu'))
 model.add(Dense(vocab_size, activation='softmax'))
 print(model.summary())
 
@@ -166,7 +167,8 @@ print(model.summary())
 # compile model
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 # fit model
-history=model.fit(X, y, batch_size=256, epochs=50, validation_split=0.2)
+history=model.fit(X, y, batch_size=512, epochs=50)
+model.save("model.h5")
 
 # Plot training & validation accuracy values
 plt.figure()
